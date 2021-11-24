@@ -11,6 +11,7 @@ struct MainMenuView: View {
     @State private var nickname: String = ""
     
     var body: some View {
+        NavigationView {
         VStack {
             VStack {
                 Text("GeoSnake")
@@ -18,7 +19,9 @@ struct MainMenuView: View {
             }
             Spacer()
             VStack {
-                Image(systemName: "arrowtriangle.right.circle").font(.system(size: 50, weight: .light))
+                NavigationLink(destination: GameView()) {
+                    Image(systemName: "arrowtriangle.right.circle").font(.system(size: 50, weight: .light))
+            }
             }
             Spacer()
             Spacer()
@@ -37,7 +40,10 @@ struct MainMenuView: View {
                 }
             }
         }
+        }
+       
     }
+    
 }
 
 struct MainMenu_Previews: PreviewProvider {
