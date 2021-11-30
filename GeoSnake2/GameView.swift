@@ -17,6 +17,9 @@ struct GameView: View {
     @StateObject var snake = Snake()
     @StateObject var input = DirInput()
     @StateObject var score = Score()
+    @StateObject var gameover = GameOver()
+    
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         VStack {
@@ -27,9 +30,19 @@ struct GameView: View {
                 Button("up", action: turnUp)
                 Button("down", action: turnDown)
             }
-            MapView(snake: snake, input: input, score: score)
+            MapView(snake: snake, input: input, score: score, gameover: gameover)
+        }.sheet(isPresented: $gameover.gameover, onDismiss: didDismiss){
+            VStack {
+                Text("Game Over!").font(.system(size:30))
+                Text("Your score: \(score.score)").font(.system(size:20))
+                
+            }
+            
         }
-        
+    }
+    
+    func didDismiss(){
+        dismiss()
     }
     
     func turnLeft(){
@@ -61,6 +74,7 @@ struct MapView: UIViewRepresentable {
     @ObservedObject var snake: Snake
     @ObservedObject var input: DirInput
     @ObservedObject var score: Score
+    @ObservedObject var gameover: GameOver
     
     var drawingTimer: Timer?
     @State var polyline: MKPolyline?
@@ -83,29 +97,40 @@ struct MapView: UIViewRepresentable {
         mapView.setRegion(region, animated: true)
         
         var scoreTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)  { _ in
-            score.score += 1
+            if(gameover.gameover == false) {
+                score.score += 1
+            }
+            
         }
         
         var timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
+            if(gameover.gameover == false) {
             DispatchQueue.main.async {
                 let a = snake.coords.last!.longitude
                 let aa = snake.coords.last!.latitude
-                
+                var nc: CLLocationCoordinate2D
                 switch input.input {
                 case "UP":
-                    snake.coords.append(CLLocationCoordinate2D(latitude: aa + 0.0001, longitude: a))
+                    nc = CLLocationCoordinate2D(latitude: aa + 0.0001, longitude: a)
                 case "RIGHT":
-                    snake.coords.append(CLLocationCoordinate2D(latitude: aa, longitude: a + 0.0001))
+                    nc = CLLocationCoordinate2D(latitude: aa, longitude: a + 0.0001)
                 case "LEFT":
-                    snake.coords.append(CLLocationCoordinate2D(latitude: aa, longitude: a - 0.0001))
+                    nc = CLLocationCoordinate2D(latitude: aa, longitude: a - 0.0001)
                 case "DOWN":
-                    snake.coords.append(CLLocationCoordinate2D(latitude: aa - 0.0001, longitude: a))
+                    nc = CLLocationCoordinate2D(latitude: aa - 0.0001, longitude: a)
                 default:
-                    snake.coords.append(CLLocationCoordinate2D(latitude: aa + 0.0001, longitude: a))
+                    nc = CLLocationCoordinate2D(latitude: aa + 0.0001, longitude: a)
                 }
-                if(snake.coords.count > max(10, (score.score / 10))) {
+                
+                if(snake.coords.contains(where: { $0.latitude == nc.latitude && $0.longitude == nc.longitude })){
+                    gameover.gameover = true
+                }
+                snake.coords.append(nc)
+                
+                if(snake.coords.count > max(10, (score.score / 5))) {
                     snake.coords.remove(at: 0)
                 }
+            }
             }
         }
         
@@ -135,7 +160,7 @@ struct MapView: UIViewRepresentable {
         uiView.addOverlay(polyline)
         
         let pline = MKPolyline(coordinates: [CLLocationCoordinate2D(latitude: 60.221412099276925, longitude: 24.74992471029274), CLLocationCoordinate2D(latitude: 60.22255385605699, longitude: 24.749701065905217)], count: 2)
-       
+        
         uiView.delegate = context.coordinator
     }
 }
@@ -151,4 +176,8 @@ class DirInput: ObservableObject {
 
 class Score: ObservableObject {
     @Published var score : Int = 1
+}
+
+class GameOver: ObservableObject {
+    @Published var gameover: Bool = false
 }
