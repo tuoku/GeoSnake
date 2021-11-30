@@ -85,7 +85,7 @@ struct MapView: UIViewRepresentable {
             span: MKCoordinateSpan(latitudeDelta: 0.000001, longitudeDelta: 0.000001))
         mapView.setRegion(region, animated: true)
         
-        var timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+        var timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
             DispatchQueue.main.async {
                 let a = snake.coords.last!.longitude
                 let aa = snake.coords.last!.latitude
@@ -104,7 +104,11 @@ struct MapView: UIViewRepresentable {
                     snake.coords.append(CLLocationCoordinate2D(latitude: aa + 0.0001, longitude: a))
                                     
                 }
-                
+                if(snake.coords.count > 10) {
+                    snake.coords.remove(at: 0)
+
+                }
+
                 	
             }
         }
@@ -137,7 +141,8 @@ struct MapView: UIViewRepresentable {
        
         let polyline = MKPolyline(coordinates: snake.coords, count: snake.coords.count)
                    // mapView.addAnnotations([p1, p2])
-        uiView.removeOverlay(polyline)
+        uiView.removeOverlays(uiView.overlays)
+        
                     uiView.addOverlay(polyline)
         
         let pline = MKPolyline(coordinates: [CLLocationCoordinate2D(latitude: 60.221412099276925, longitude: 24.74992471029274), CLLocationCoordinate2D(latitude: 60.22255385605699, longitude: 24.749701065905217)], count: 2)
