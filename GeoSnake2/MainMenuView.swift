@@ -36,12 +36,13 @@ struct MainMenuView: View {
                     
                 }
                 VStack {
+                    NavigationLink(destination: SettingsView()) {
                     Image(systemName: "gearshape").font(.system(size: 20, weight: .light))
                 }
             }
         }
         }
-       
+        }
     }
     
 }
