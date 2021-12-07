@@ -74,8 +74,8 @@
 			isa = PBXGroup;
 			children = (
 				6A822213274D26D3006F06DA /* GeoSnake2App.swift */,
-				6A822215274D26D3006F06DA /* ContentView.swift */,
 				6A822217274D26D7006F06DA /* Assets.xcassets */,
+				6A822215274D26D3006F06DA /* ContentView.swift */,
 				6A894EDE274D422800AC5107 /* Fonts */,
 				6A82221C274D26D7006F06DA /* Persistence.swift */,
 				6A82221E274D26D7006F06DA /* GeoSnake2.xcdatamodeld */,
