@@ -13,6 +13,7 @@ struct MainMenuView: View {
     var body: some View {
         NavigationView {
         VStack {
+            
             VStack {
                 Text("GeoSnake")
                     .font(.largeTitle)
@@ -40,8 +41,8 @@ struct MainMenuView: View {
                 }
             }
         }
+        
         }
-       
     }
     
 }
@@ -51,3 +52,4 @@ struct MainMenu_Previews: PreviewProvider {
         MainMenuView()
     }
 }
+

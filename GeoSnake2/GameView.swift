@@ -10,18 +10,46 @@ import MapKit
 
 struct GameView: View {
     
-    // private let speechRecognizer = SpeechRecognizer()
-    @State private var transcript = ""
-    @State private var isRecording = false
+    private let speechRecognizer = SpeechRecognizer()
+    @State var transcript = ""
     
+    @State private var isRecording = false
+        
     @StateObject var snake = Snake()
     @StateObject var input = DirInput()
     @StateObject var score = Score()
     @StateObject var gameover = GameOver()
+    @StateObject var locationManager = LocationManager()
+    @State private var hasLoaded = false
+    
     
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
+        let transcriptBinding = Binding<String>(
+            get: {
+            self.transcript
+        },
+            set: {
+                self.transcript = $0
+                if transcript.uppercased().contains("VASEN") {
+                    turnLeft()
+                    self.transcript = ""
+                }
+                if transcript.uppercased().contains("OIKEA") {
+                    turnRight()
+                    self.transcript = ""
+                }
+                if transcript.uppercased().contains("YLÖS") {
+                    turnUp()
+                    self.transcript = ""
+                }
+                if transcript.uppercased().contains("ALAS") {
+                    turnDown()
+                    self.transcript = ""
+                }
+        })
+        if hasLoaded {
         VStack {
             Text("Score: \(score.score)").font(.system(size:30))
             HStack {
@@ -30,7 +58,7 @@ struct GameView: View {
                 Button("up", action: turnUp)
                 Button("down", action: turnDown)
             }
-            MapView(snake: snake, input: input, score: score, gameover: gameover)
+            MapView(snake: snake, input: input, score: score, gameover: gameover, locationManager: locationManager)
         }.sheet(isPresented: $gameover.gameover, onDismiss: didDismiss){
             VStack {
                 Text("Game Over!").font(.system(size:30))
@@ -39,6 +67,17 @@ struct GameView: View {
             }
             
         }
+        } else {
+            VStack {
+                    ProgressView()
+            }.onReceive(locationManager.$lastLocation) { location in
+                if location != nil {
+                    hasLoaded = true
+                }
+                speechRecognizer.record(to: transcriptBinding)
+                            }
+        }
+            
     }
     
     func didDismiss(){
@@ -75,6 +114,15 @@ struct MapView: UIViewRepresentable {
     @ObservedObject var input: DirInput
     @ObservedObject var score: Score
     @ObservedObject var gameover: GameOver
+    @ObservedObject var locationManager: LocationManager
+    
+    var userLatitude: Double {
+            return locationManager.lastLocation?.coordinate.latitude ?? 0
+        }
+        
+        var userLongitude: Double {
+            return locationManager.lastLocation?.coordinate.longitude ?? 0
+        }
     
     var drawingTimer: Timer?
     @State var polyline: MKPolyline?
@@ -88,22 +136,24 @@ struct MapView: UIViewRepresentable {
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
         
-        mapView.showsUserLocation = true
-        mapView.userTrackingMode = .followWithHeading
+        snake.coords = [CLLocationCoordinate2D(latitude: userLatitude, longitude: userLongitude)]
+        
+        
+       
         
         let region = MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 60.223623633557104, longitude: 24.758503049950143),
+            center: CLLocationCoordinate2D(latitude: userLatitude, longitude: userLongitude),
             span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02))
         mapView.setRegion(region, animated: true)
         
-        var scoreTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)  { _ in
+        _ = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)  { _ in
             if(gameover.gameover == false) {
                 score.score += 1
             }
             
         }
         
-        var timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
+        _ = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
             if(gameover.gameover == false) {
             DispatchQueue.main.async {
                 let a = snake.coords.last!.longitude
@@ -111,15 +161,15 @@ struct MapView: UIViewRepresentable {
                 var nc: CLLocationCoordinate2D
                 switch input.input {
                 case "UP":
-                    nc = CLLocationCoordinate2D(latitude: aa + 0.0001, longitude: a)
+                    nc = CLLocationCoordinate2D(latitude: aa + 0.0002, longitude: a)
                 case "RIGHT":
-                    nc = CLLocationCoordinate2D(latitude: aa, longitude: a + 0.0001)
+                    nc = CLLocationCoordinate2D(latitude: aa, longitude: a + 0.0002)
                 case "LEFT":
-                    nc = CLLocationCoordinate2D(latitude: aa, longitude: a - 0.0001)
+                    nc = CLLocationCoordinate2D(latitude: aa, longitude: a - 0.0002)
                 case "DOWN":
-                    nc = CLLocationCoordinate2D(latitude: aa - 0.0001, longitude: a)
+                    nc = CLLocationCoordinate2D(latitude: aa - 0.0002, longitude: a)
                 default:
-                    nc = CLLocationCoordinate2D(latitude: aa + 0.0001, longitude: a)
+                    nc = CLLocationCoordinate2D(latitude: aa + 0.0002, longitude: a)
                 }
                 
                 if(snake.coords.contains(where: { $0.latitude == nc.latitude && $0.longitude == nc.longitude })){
@@ -158,8 +208,6 @@ struct MapView: UIViewRepresentable {
         uiView.removeOverlays(uiView.overlays)
         
         uiView.addOverlay(polyline)
-        
-        let pline = MKPolyline(coordinates: [CLLocationCoordinate2D(latitude: 60.221412099276925, longitude: 24.74992471029274), CLLocationCoordinate2D(latitude: 60.22255385605699, longitude: 24.749701065905217)], count: 2)
         
         uiView.delegate = context.coordinator
     }
