@@ -7,12 +7,24 @@
 
 import SwiftUI
 
+class Nickname: ObservableObject {
+    var nickname : String = "" {
+        willSet(newNickname) {
+            print(newNickname)
+        }
+    }
+}
+
 struct MainMenuView: View {
-    @State private var nickname: String = ""
-    
+    @ObservedObject var data = Nickname()
     var body: some View {
+        
+        
+            
         NavigationView {
+            
         VStack {
+            
             VStack {
                 Text("GeoSnake")
                     .font(.largeTitle)
@@ -21,12 +33,12 @@ struct MainMenuView: View {
             VStack {
                 NavigationLink(destination: GameView()) {
                     Image(systemName: "arrowtriangle.right.circle").font(.system(size: 50, weight: .light))
-            }
+                }
             }
             Spacer()
             Spacer()
             VStack {
-                TextField("Nickname:", text: $nickname).padding(.horizontal, 15.0).textInputAutocapitalization(.never).disableAutocorrection(true)
+                TextField("Nickname:", text: $data.nickname).padding(.horizontal, 15.0).textInputAutocapitalization(.never).disableAutocorrection(true).foregroundColor(Color.pink).accentColor(Color.pink).textFieldStyle(RoundedBorderTextFieldStyle())
             }
             Spacer()
             Spacer()
@@ -39,7 +51,11 @@ struct MainMenuView: View {
                     Image(systemName: "gearshape").font(.system(size: 20, weight: .light))
                 }
             }
-        }
+            
+        }.background(Image(uiImage: UIImage(named: "download")!)
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.all))
         }
        
     }
@@ -51,3 +67,5 @@ struct MainMenu_Previews: PreviewProvider {
         MainMenuView()
     }
 }
+
+
