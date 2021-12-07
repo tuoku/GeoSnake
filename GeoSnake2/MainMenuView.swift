@@ -66,7 +66,7 @@ struct MainMenuView: View {
 
     }
     
-}
+
 
 struct MainMenu_Previews: PreviewProvider {
     static var previews: some View {
