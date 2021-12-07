@@ -51,13 +51,14 @@ struct MainMenuView: View {
                     Image(systemName: "gearshape").font(.system(size: 20, weight: .light))
                 }
             }
+
             
         }.background(Image(uiImage: UIImage(named: "download")!)
                         .resizable()
                         .scaledToFill()
                         .edgesIgnoringSafeArea(.all))
+
         }
-       
     }
     
 }
