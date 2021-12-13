@@ -38,13 +38,14 @@ struct MainMenuView: View {
             Spacer()
             HStack {
                 VStack {
+                    NavigationLink(destination: LeaderboardView()) {
                     Image(systemName: "flag.filled.and.flag.crossed").font(.system(size: 20, weight: .light))
-                    
+                }.buttonStyle(PlainButtonStyle())
                 }
                 VStack {
                     NavigationLink(destination: SettingsView()) {
                     Image(systemName: "gearshape").font(.system(size: 20, weight: .light))
-                }
+                }.buttonStyle(PlainButtonStyle())
             }
         }
     }.background(Image(uiImage: UIImage(named: "download")!)
