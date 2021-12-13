@@ -32,7 +32,7 @@ struct MainMenuView: View {
             Spacer()
             Spacer()
             VStack {
-                TextField("Nickname:", text: $data.nickname).padding(.horizontal, 15.0).textInputAutocapitalization(.never).disableAutocorrection(true).foregroundColor(Color.pink).accentColor(Color.pink).textFieldStyle(RoundedBorderTextFieldStyle())
+                TextField("nickname:", text: $data.nickname).padding(.horizontal, 15.0).textInputAutocapitalization(.never).disableAutocorrection(true).foregroundColor(Color.pink).accentColor(Color.pink).textFieldStyle(RoundedBorderTextFieldStyle())
             }
             Spacer()
             Spacer()

@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  GeoSnake2
+
+  Created by iosdev on 13.12.2021.
+*/
+"nickname:" = "Nickname:";
+"score key %lld" = "Score: %lld";
+"down key" = "Down";
+"up key" = "Up";
+"right key" = "Right";
+"left key" = "Left";
+"game over key" = "Game Over!";
+"your score key" = "Your score";

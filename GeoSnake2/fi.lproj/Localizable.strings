@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  GeoSnake2
+
+  Created by iosdev on 13.12.2021.
+*/
+"nickname:" = "kutsumanimi:";
+"score key %lld" = "Pisteet: %lld";
+"down key" = "Alas";
+"up key" = "Ylös";
+"right key" = "Oikea";
+"left key" = "Vasen";
+"game over key" = "Peli ohi!";
+"your score key" = "Pisteesi";"

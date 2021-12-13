@@ -28,18 +28,18 @@ struct GameView: View {
         
         if hasLoaded {
         VStack {
-            Text("Score: \(score.score)").font(.system(size:30))
+            Text("score key \(score.score)").font(.system(size:30))
             HStack {
-                Button("left", action: turnLeft)
-                Button("right", action: turnRight)
-                Button("up", action: turnUp)
-                Button("down", action: turnDown)
+                Button("left key", action: turnLeft)
+                Button("right key", action: turnRight)
+                Button("up key", action: turnUp)
+                Button("down key", action: turnDown)
             }
             MapView(snake: snake, input: input, score: score, gameover: gameover, locationManager: locationManager)
         }.sheet(isPresented: $gameover.gameover, onDismiss: didDismiss){
             VStack {
-                Text("Game Over!").font(.system(size:30))
-                Text("Your score: \(score.score)").font(.system(size:20))
+                Text("game over key").font(.system(size:30))
+                Text("your score key \(score.score)").font(.system(size:20))
                 
             }
             

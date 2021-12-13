@@ -24,6 +24,7 @@
 		6A894EE7274D428600AC5107 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6A894EDF274D425700AC5107 /* Montserrat-Regular.ttf */; };
 		6A894EE8274D428A00AC5107 /* Montserrat-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6A894EDD274D41E200AC5107 /* Montserrat-Black.ttf */; };
 		6A914BAD276752A4001AFAC8 /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A914BAC276752A4001AFAC8 /* LeaderboardView.swift */; };
+		6A914BB0276771E7001AFAC8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6A914BB2276771E7001AFAC8 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,8 @@
 		6A894EE1274D426900AC5107 /* Montserrat-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Light.ttf"; sourceTree = "<group>"; };
 		6A894EE2274D427900AC5107 /* Montserrat-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-MediumItalic.ttf"; sourceTree = "<group>"; };
 		6A914BAC276752A4001AFAC8 /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
+		6A914BB1276771E7001AFAC8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6A914BBE276789B4001AFAC8 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +93,7 @@
 				6A273444275ED31900A74352 /* SettingsView.swift */,
 				6A272DD2275FBEED0057F754 /* LocationManager.swift */,
 				6A272DD4276000C70057F754 /* SpeechRecognizer.swift */,
+				6A914BB2276771E7001AFAC8 /* Localizable.strings */,
 			);
 			path = GeoSnake2;
 			sourceTree = "<group>";
@@ -178,6 +182,7 @@
 				6A894EE4274D427E00AC5107 /* Montserrat-Light.ttf in Resources */,
 				6A894EE5274D428100AC5107 /* Montserrat-Medium.ttf in Resources */,
 				6A82221B274D26D7006F06DA /* Preview Assets.xcassets in Resources */,
+				6A914BB0276771E7001AFAC8 /* Localizable.strings in Resources */,
 				6A894EE3274D427900AC5107 /* Montserrat-MediumItalic.ttf in Resources */,
 				6A822218274D26D7006F06DA /* Assets.xcassets in Resources */,
 			);
@@ -204,6 +209,18 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		6A914BB2276771E7001AFAC8 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6A914BB1276771E7001AFAC8 /* en */,
+				6A914BBE276789B4001AFAC8 /* fi */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		6A822221274D26D7006F06DA /* Debug */ = {
