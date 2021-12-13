@@ -8,23 +8,33 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @AppStorage("toggleSfx") private var sfxOn = true
+    @AppStorage("toggleMusic") private var musicOn = true
+    @AppStorage("toggleNotifications") private var notificationsOn = true
+    
     var body: some View {
         
         NavigationView {
             
             Form {
                 
-                Section(header: Text("Display")) {
+                Section(header: Text("Sounds")) {
                     
-                    Toggle(isOn: .constant(true),
+                    Toggle(isOn: $sfxOn,
                            label: {
-                        Text("Dark mode")
+                        Text("SFX")
                     })
                     
-                    Toggle(isOn: .constant(true),
+                    Toggle(isOn: $musicOn,
                            label: {
-                    Text("Use system settings")
+                    Text("Music")
                 })
+                }
+                Section(header:
+                            Text("Other")) {
+                    Toggle(isOn: $notificationsOn, label: {
+                        Text("Notifications")
+                    })
                 }
             }
             .navigationTitle("Settings")
