@@ -8,13 +8,27 @@
 import SwiftUI
 
 struct LeaderboardView: View {
+    
+    @State var scores = [Highscore]()
+    
     var body: some View {
         VStack {
-            Image(uiImage: UIImage(named: "avatarplaceholder")!)
-                .resizable()
-                .clipped()
-                .clipShape(Circle())
-                .frame(width: 100, height: 100, alignment: .center)
+            HStack {
+                Image(uiImage: UIImage(named: "avatarplaceholder")!)
+                    .resizable()
+                    .clipped()
+                    .clipShape(Circle())
+                    .frame(width: 100, height: 100, alignment: .leading)
+                Text("Juku")
+            }
+            VStack {
+                List(scores) { score in
+                    Text("\(score.nickname)")
+                }
+            }
+            
+        }.onAppear() {
+            Api().loadData { (scores) in self.scores = scores} }.navigationTitle("Scores")
         }
     }
 
@@ -23,4 +37,4 @@ struct LeaderboardView_Previews: PreviewProvider {
         LeaderboardView()
         }
     }
-}
+

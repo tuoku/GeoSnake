@@ -25,7 +25,6 @@ struct GameView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        
         if hasLoaded {
         VStack {
             Text("Score: \(score.score)").font(.system(size:30))
@@ -40,9 +39,12 @@ struct GameView: View {
             VStack {
                 Text("Game Over!").font(.system(size:30))
                 Text("Your score: \(score.score)").font(.system(size:20))
-                
+                NavigationView {
+                            NavigationLink(destination: LeaderboardView()) {
+                                Text("Go!")
+                            }
+                        }
             }
-            
         }
         } else {
             VStack {
@@ -55,6 +57,7 @@ struct GameView: View {
                             }
         }
             
+
     }
     
     func didDismiss(){
