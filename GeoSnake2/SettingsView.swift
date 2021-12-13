@@ -26,6 +26,7 @@ struct SettingsView: View {
                     Text("Use system settings")
                 })
                 }
+                
             }
             .navigationTitle("Settings")
         }
@@ -35,6 +36,7 @@ struct SettingsView: View {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
+        
     }
 }
 }
