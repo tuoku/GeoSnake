@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  vittu-app
+//
 //
 //  Created by iosdev on 10.11.2021.
 //
@@ -11,7 +11,6 @@ import MapKit
 struct GameView: View {
     
     private let speechRecognizer = SpeechRecognizer()
-    @State var transcript = ""
     
     @State private var isRecording = false
         
@@ -26,29 +25,7 @@ struct GameView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        let transcriptBinding = Binding<String>(
-            get: {
-            self.transcript
-        },
-            set: {
-                self.transcript = $0
-                if transcript.uppercased().contains("VASEN") {
-                    turnLeft()
-                    self.transcript = ""
-                }
-                if transcript.uppercased().contains("OIKEA") {
-                    turnRight()
-                    self.transcript = ""
-                }
-                if transcript.uppercased().contains("YLÖS") {
-                    turnUp()
-                    self.transcript = ""
-                }
-                if transcript.uppercased().contains("ALAS") {
-                    turnDown()
-                    self.transcript = ""
-                }
-        })
+        
         if hasLoaded {
         VStack {
             Text("Score: \(score.score)").font(.system(size:30))
@@ -74,7 +51,7 @@ struct GameView: View {
                 if location != nil {
                     hasLoaded = true
                 }
-                speechRecognizer.record(to: transcriptBinding)
+                speechRecognizer.record(to: $input.transcript)
                             }
         }
             
@@ -115,6 +92,7 @@ struct MapView: UIViewRepresentable {
     @ObservedObject var score: Score
     @ObservedObject var gameover: GameOver
     @ObservedObject var locationManager: LocationManager
+    
     
     var userLatitude: Double {
             return locationManager.lastLocation?.coordinate.latitude ?? 0
@@ -175,6 +153,9 @@ struct MapView: UIViewRepresentable {
                 if(snake.coords.contains(where: { $0.latitude == nc.latitude && $0.longitude == nc.longitude })){
                     gameover.gameover = true
                 }
+                if(CLLocation(latitude: nc.latitude, longitude: nc.longitude).distance(from: CLLocation(latitude: userLatitude, longitude: userLongitude)) > 10000) {
+                    gameover.gameover = true
+                }
                 snake.coords.append(nc)
                 
                 if(snake.coords.count > max(10, (score.score / 5))) {
@@ -190,6 +171,13 @@ struct MapView: UIViewRepresentable {
     
     class MapViewCoordinator: NSObject, MKMapViewDelegate {
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+            if overlay is MKCircle{
+                let renderer = MKCircleRenderer(overlay: overlay)
+                      renderer.fillColor = UIColor.black.withAlphaComponent(0.0)
+                      renderer.strokeColor = UIColor.red
+                      renderer.lineWidth = 10
+                      return renderer
+                }
             let renderer = MKPolylineRenderer(overlay: overlay)
             renderer.strokeColor = .systemBlue
             renderer.lineWidth = 10
@@ -206,6 +194,8 @@ struct MapView: UIViewRepresentable {
         let polyline = MKPolyline(coordinates: snake.coords, count: snake.coords.count)
         // mapView.addAnnotations([p1, p2])
         uiView.removeOverlays(uiView.overlays)
+        let circle = MKCircle(center: CLLocationCoordinate2D(latitude: userLatitude, longitude: userLongitude), radius: 10000)
+        uiView.addOverlay(circle)
         
         uiView.addOverlay(polyline)
         
@@ -220,6 +210,27 @@ class Snake: ObservableObject {
 
 class DirInput: ObservableObject {
     @Published var input : String = "UP"
+    @Published var transcript: String = "" {
+        didSet{
+            print("DIR " + self.transcript)
+            if self.transcript.components(separatedBy: " ").last?.uppercased() == "LEFT" {
+                input = "LEFT"
+                self.transcript = ""
+            }
+            if self.transcript.components(separatedBy: " ").last?.uppercased() == "RIGHT" {
+                input = "RIGHT"
+                self.transcript = ""
+            }
+            if self.transcript.components(separatedBy: " ").last?.uppercased() == "UP" {
+                input = "UP"
+                self.transcript = ""
+            }
+            if self.transcript.components(separatedBy: " ").last?.uppercased() == "DOWN" {
+                input = "DOWN"
+                self.transcript = ""
+            }
+        }
+    }
 }
 
 class Score: ObservableObject {
@@ -229,3 +240,5 @@ class Score: ObservableObject {
 class GameOver: ObservableObject {
     @Published var gameover: Bool = false
 }
+
+

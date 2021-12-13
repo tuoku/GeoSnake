@@ -16,13 +16,14 @@ struct SpeechRecognizer {
         var audioEngine: AVAudioEngine?
         var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
         var recognitionTask: SFSpeechRecognitionTask?
-        let speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "fi_FI"))
+        let speechRecognizer = SFSpeechRecognizer()
         
         deinit {
             reset()
         }
         
         func reset() {
+            audioEngine?.inputNode.removeTap(onBus: 0)
             recognitionTask?.cancel()
             audioEngine?.stop()
             audioEngine = nil
