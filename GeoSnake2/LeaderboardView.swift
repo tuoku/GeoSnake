@@ -8,13 +8,33 @@
 import SwiftUI
 
 struct LeaderboardView: View {
+    
+    @State var scores = [Highscore]()
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            HStack {
+                Image(uiImage: UIImage(named: "avatarplaceholder")!)
+                    .resizable()
+                    .clipped()
+                    .clipShape(Circle())
+                    .frame(width: 100, height: 100, alignment: .leading)
+                Text("Juku")
+            }
+            VStack {
+                List(scores) { score in
+                    Text("\(score.nickname)")
+                }
+            }
+            
+        }.onAppear() {
+            Api().loadData { (scores) in self.scores = scores} }.navigationTitle("Scores")
+        }
     }
-}
 
 struct LeaderboardView_Previews: PreviewProvider {
     static var previews: some View {
         LeaderboardView()
+        }
     }
-}
+
