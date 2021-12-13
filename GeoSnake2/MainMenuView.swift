@@ -4,7 +4,6 @@
 //
 //  Created by iosdev on 23.11.2021.
 //
-
 import SwiftUI
 
 class Nickname: ObservableObject {
@@ -18,13 +17,8 @@ class Nickname: ObservableObject {
 struct MainMenuView: View {
     @ObservedObject var data = Nickname()
     var body: some View {
-        
-        
-            
         NavigationView {
-            
         VStack {
-            
             VStack {
                 Text("GeoSnake")
                     .font(.largeTitle)
@@ -52,26 +46,18 @@ struct MainMenuView: View {
                     Image(systemName: "gearshape").font(.system(size: 20, weight: .light))
                 }
             }
-
-            
-        }.background(Image(uiImage: UIImage(named: "download")!)
+        }
+    }.background(Image(uiImage: UIImage(named: "download")!)
                         .resizable()
                         .scaledToFill()
                         .edgesIgnoringSafeArea(.all))
-
         }
-
-        }
-        }
-
     }
+}
     
-
-
 struct MainMenu_Previews: PreviewProvider {
     static var previews: some View {
         MainMenuView()
     }
 }
-
 
