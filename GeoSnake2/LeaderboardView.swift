@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Responsible for rendering the leaderboard
 struct LeaderboardView: View {
     
     @State var scores = [Highscore]()
