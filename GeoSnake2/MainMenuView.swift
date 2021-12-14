@@ -7,7 +7,7 @@
 import SwiftUI
 
 class Nickname: ObservableObject {
-    var nickname : String = "" {
+   @Published var nickname : String = "" {
         willSet(newNickname) {
             print(newNickname)
         }
@@ -25,7 +25,7 @@ struct MainMenuView: View {
             }
             Spacer()
             VStack {
-                NavigationLink(destination: GameView()) {
+                NavigationLink(destination: GameView(nickname: data)) {
                     Image(systemName: "arrowtriangle.right.circle").font(.system(size: 50, weight: .light))
                 }
             }
@@ -38,7 +38,7 @@ struct MainMenuView: View {
             Spacer()
             HStack {
                 VStack {
-                    NavigationLink(destination: LeaderboardView()) {
+                    NavigationLink(destination: LeaderboardView(nickname: data)) {
                     Image(systemName: "flag.filled.and.flag.crossed").font(.system(size: 20, weight: .light))
                 }.buttonStyle(PlainButtonStyle())
                 }
