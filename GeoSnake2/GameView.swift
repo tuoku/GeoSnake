@@ -19,8 +19,10 @@ struct GameView: View {
     @StateObject var score = Score()
     @StateObject var gameover = GameOver()
     @StateObject var locationManager = LocationManager()
+    
     @State private var hasLoaded = false
     
+    @ObservedObject var nickname: Nickname
     
     @Environment(\.dismiss) var dismiss
     
@@ -40,10 +42,31 @@ struct GameView: View {
                 Text("Game Over!").font(.system(size:30))
                 Text("Your score: \(score.score)").font(.system(size:20))
                 NavigationView {
-                            NavigationLink(destination: LeaderboardView()) {
+                            NavigationLink(destination: LeaderboardView(nickname: nickname)) {
                                 Text("Go!")
                             }
                         }
+            }.onAppear() {
+                if !nickname.nickname.isEmpty {
+                guard let url = URL(string: "https://users.metropolia.fi/~tuomakuh/geosnake/?action=set&nickname=\(nickname.nickname)&highscore=\(score.score)") else { fatalError("Missing URL") }
+
+                    let urlRequest = URLRequest(url: url)
+
+                    let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+                        if let error = error {
+                            print("Request error: ", error)
+                            return
+                        }
+
+                        guard let response = response as? HTTPURLResponse else { return }
+
+                        if response.statusCode == 200 {
+                           print("score uploaded")
+                        }
+                    }
+
+                    dataTask.resume()
+                }
             }
         }
         } else {
@@ -62,6 +85,7 @@ struct GameView: View {
     
     func didDismiss(){
         dismiss()
+        gameover.gameover = false
     }
     
     func turnLeft(){
@@ -156,7 +180,7 @@ struct MapView: UIViewRepresentable {
                 if(snake.coords.contains(where: { $0.latitude == nc.latitude && $0.longitude == nc.longitude })){
                     gameover.gameover = true
                 }
-                if(CLLocation(latitude: nc.latitude, longitude: nc.longitude).distance(from: CLLocation(latitude: userLatitude, longitude: userLongitude)) > 10000) {
+                if(CLLocation(latitude: nc.latitude, longitude: nc.longitude).distance(from: CLLocation(latitude: userLatitude, longitude: userLongitude)) > 1000) {
                     gameover.gameover = true
                 }
                 snake.coords.append(nc)
@@ -197,7 +221,7 @@ struct MapView: UIViewRepresentable {
         let polyline = MKPolyline(coordinates: snake.coords, count: snake.coords.count)
         // mapView.addAnnotations([p1, p2])
         uiView.removeOverlays(uiView.overlays)
-        let circle = MKCircle(center: CLLocationCoordinate2D(latitude: userLatitude, longitude: userLongitude), radius: 10000)
+        let circle = MKCircle(center: CLLocationCoordinate2D(latitude: userLatitude, longitude: userLongitude), radius: 1000)
         uiView.addOverlay(circle)
         
         uiView.addOverlay(polyline)

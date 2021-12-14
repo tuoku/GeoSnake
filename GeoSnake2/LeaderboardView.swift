@@ -10,6 +10,7 @@ import SwiftUI
 struct LeaderboardView: View {
     
     @State var scores = [Highscore]()
+    @ObservedObject var nickname: Nickname
     
     var body: some View {
         VStack {
@@ -19,11 +20,16 @@ struct LeaderboardView: View {
                     .clipped()
                     .clipShape(Circle())
                     .frame(width: 100, height: 100, alignment: .leading)
-                Text("Juku")
+                Text(nickname.nickname)
             }
             VStack {
                 List(scores) { score in
-                    Text("\(score.nickname)")
+                    HStack {
+                        Text("\(score.nickname)")
+                        Spacer()
+                        Text("\(score.highscore)")
+                    }
+                    
                 }
             }
             
@@ -34,7 +40,7 @@ struct LeaderboardView: View {
 
 struct LeaderboardView_Previews: PreviewProvider {
     static var previews: some View {
-        LeaderboardView()
+        MainMenuView()
         }
     }
 
