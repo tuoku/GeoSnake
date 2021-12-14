@@ -13,22 +13,20 @@ struct LeaderboardView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Image(uiImage: UIImage(named: "avatarplaceholder")!)
-                    .resizable()
-                    .clipped()
-                    .clipShape(Circle())
-                    .frame(width: 100, height: 100, alignment: .leading)
-                Text("Juku")
-            }
+        
             VStack {
                 List(scores) { score in
-                    Text("\(score.nickname)")
+                    HStack {
+                        Text("\(score.nickname)")
+                        Spacer()
+                        Text("\(score.highscore)")
+                    }
                 }
+            
             }
             
         }.onAppear() {
-            Api().loadData { (scores) in self.scores = scores} }.navigationTitle("Scores")
+            Api().loadData { (scores) in self.scores = scores} }
         }
     }
 
