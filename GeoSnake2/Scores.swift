@@ -7,12 +7,14 @@
 
 import Foundation
 
+/// model for fetched highscores
 struct Highscore: Codable, Identifiable {
     let id = UUID()
     var nickname: String
     var highscore: String
 }
 
+/// model for interacting with the custom API
 class Api : ObservableObject {
     @Published var highscores = [Highscore]()
     

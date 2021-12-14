@@ -6,6 +6,7 @@
 //
 import SwiftUI
 
+/// Provides the player nickname used throughout the app
 class Nickname: ObservableObject {
    @Published var nickname : String = "" {
         willSet(newNickname) {
@@ -14,6 +15,7 @@ class Nickname: ObservableObject {
     }
 }
 
+/// Responsible for rendering the main menu
 struct MainMenuView: View {
     @ObservedObject var data = Nickname()
     var body: some View {

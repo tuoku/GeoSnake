@@ -9,6 +9,7 @@ import Foundation
 import CoreLocation
 import Combine
 
+/// Responsible for managing everything location related
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     private let locationManager = CLLocationManager()

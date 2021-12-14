@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  GameView.swift
 //
 //
 //  Created by iosdev on 10.11.2021.
@@ -8,6 +8,7 @@
 import SwiftUI
 import MapKit
 
+/// Responsible for the game UI
 struct GameView: View {
     
     private let speechRecognizer = SpeechRecognizer()
@@ -27,6 +28,7 @@ struct GameView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
+        // show loading screen until location established
         if hasLoaded {
         VStack {
             Text("Score: \(score.score)").font(.system(size:30))
@@ -43,10 +45,11 @@ struct GameView: View {
                 Text("Your score: \(score.score)").font(.system(size:20))
                 NavigationView {
                             NavigationLink(destination: LeaderboardView(nickname: nickname)) {
-                                Text("Go!")
+                                Text("Leaderboards")
                             }
                         }
             }.onAppear() {
+                // Upload score if user is not anonymous
                 if !nickname.nickname.isEmpty {
                 guard let url = URL(string: "https://users.metropolia.fi/~tuomakuh/geosnake/?action=set&nickname=\(nickname.nickname)&highscore=\(score.score)") else { fatalError("Missing URL") }
 
@@ -111,6 +114,7 @@ struct GameView_Previews: PreviewProvider {
     }
 }
 
+/// Responsible for rendering the map and associated overlays
 struct MapView: UIViewRepresentable {
     
     typealias UIViewType = MKMapView
@@ -160,6 +164,7 @@ struct MapView: UIViewRepresentable {
         
         _ = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
             if(gameover.gameover == false) {
+                // snake advances 22.2 meters every 0.3 seconds
             DispatchQueue.main.async {
                 let a = snake.coords.last!.longitude
                 let aa = snake.coords.last!.latitude
@@ -177,9 +182,12 @@ struct MapView: UIViewRepresentable {
                     nc = CLLocationCoordinate2D(latitude: aa + 0.0002, longitude: a)
                 }
                 
+                // since the snake moves on a "grid" collision can be checked
+                // simply by comparing coords
                 if(snake.coords.contains(where: { $0.latitude == nc.latitude && $0.longitude == nc.longitude })){
                     gameover.gameover = true
                 }
+                // game over if boundary crossed
                 if(CLLocation(latitude: nc.latitude, longitude: nc.longitude).distance(from: CLLocation(latitude: userLatitude, longitude: userLongitude)) > 1000) {
                     gameover.gameover = true
                 }

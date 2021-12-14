@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+/// Responsible for the settings menu
 struct SettingsView: View {
     @AppStorage("toggleSfx") private var sfxOn = true
     @AppStorage("toggleMusic") private var musicOn = true
